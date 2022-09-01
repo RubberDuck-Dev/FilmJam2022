@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/interior.png-c2c2ba01af020ddaa1bfe86eba50d114.stex"
+path="res://.import/oxygen.png-24f402cf1da595bdb0839000b3915728.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://interior.png"
-dest_files=[ "res://.import/interior.png-c2c2ba01af020ddaa1bfe86eba50d114.stex" ]
+source_file="res://sprites/oxygen.png"
+dest_files=[ "res://.import/oxygen.png-24f402cf1da595bdb0839000b3915728.stex" ]
 
 [params]
 

@@ -2,9 +2,9 @@ extends RigidBody2D
 
 var resource_type = null
 
-var oxygen = preload("res://oxygen.png")
-var water = preload("res://waterdrop.png")
-var metal = preload("res://metal.png")
+var oxygen = preload("res://sprites/oxygen.png")
+var water = preload("res://sprites/waterdrop.png")
+var metal = preload("res://sprites/metal.png")
 
 var speed = 40
 var rot = rand_range(0,-180)

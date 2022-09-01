@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/metal.png-3410b2eb21cfaf23b8e137a575a2ee86.stex"
+path="res://.import/waterdrop.png-9737d085726e3e96421a90c2f516315b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://metal.png"
-dest_files=[ "res://.import/metal.png-3410b2eb21cfaf23b8e137a575a2ee86.stex" ]
+source_file="res://sprites/waterdrop.png"
+dest_files=[ "res://.import/waterdrop.png-9737d085726e3e96421a90c2f516315b.stex" ]
 
 [params]
 
