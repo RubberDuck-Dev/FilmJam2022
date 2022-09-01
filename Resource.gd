@@ -4,6 +4,7 @@ var resource_type = null
 
 var oxygen = preload("res://sprites/oxygen.png")
 var water = preload("res://sprites/waterdrop.png")
+var food = preload("res://sprites/food.png")
 var metal = preload("res://sprites/metal.png")
 
 var speed = 40
@@ -20,6 +21,9 @@ func _ready():
 			$Sprite.modulate = Color(1,1,1,1)
 		"water":
 			$Sprite.texture = water
+			$Sprite.modulate = Color(1,1,1,1)
+		"food":
+			$Sprite.texture = food
 			$Sprite.modulate = Color(1,1,1,1)
 		"metal":
 			$Sprite.texture = metal

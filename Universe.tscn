@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://sprites/icon.png" type="Texture" id=2]
@@ -6,6 +6,11 @@
 [ext_resource path="res://sprites/interior.png" type="Texture" id=4]
 [ext_resource path="res://sprites/farm.png" type="Texture" id=5]
 [ext_resource path="res://sprites/oxygenator.png" type="Texture" id=6]
+[ext_resource path="res://Theme1.theme" type="Theme" id=7]
+[ext_resource path="res://sprites/food.png" type="Texture" id=8]
+[ext_resource path="res://sprites/oxygen.png" type="Texture" id=9]
+[ext_resource path="res://sprites/waterdrop.png" type="Texture" id=10]
+[ext_resource path="res://sprites/metal.png" type="Texture" id=11]
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 292, 8 )
@@ -25,6 +30,11 @@ extents = Vector2( 8, 20 )
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 37, 53 )
 
+[sub_resource type="StyleBoxFlat" id=10]
+bg_color = Color( 0.87451, 0.843137, 0.0745098, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=11]
+
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 40, 40 )
 
@@ -33,6 +43,9 @@ extents = Vector2( 32, 32 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 128, 152 )
+
+[sub_resource type="RectangleShape2D" id=12]
+extents = Vector2( 32, 32 )
 
 [node name="Universe" type="Node2D"]
 script = ExtResource( 3 )
@@ -83,26 +96,32 @@ shape = SubResource( 8 )
 position = Vector2( 96, 352 )
 
 [node name="Label" type="Label" parent="InteriorHab/Oxygenator"]
-margin_left = 33.0
-margin_top = 13.0
-margin_right = 73.0
-margin_bottom = 27.0
+visible = false
+margin_left = 56.0
+margin_top = 24.0
+margin_right = 96.0
+margin_bottom = 44.0
+theme = ExtResource( 7 )
 text = "0	"
 
 [node name="TargetProgressBar" type="ProgressBar" parent="InteriorHab/Oxygenator"]
-modulate = Color( 1, 0.937255, 0, 1 )
+visible = false
 margin_left = -32.0
-margin_top = -56.0
-margin_right = 32.0
-margin_bottom = -42.0
+margin_top = -64.0
+margin_right = 48.0
+margin_bottom = -40.0
+theme = ExtResource( 7 )
+custom_styles/fg = SubResource( 10 )
+custom_styles/bg = SubResource( 11 )
 value = 100.0
 percent_visible = false
 
 [node name="ProgressBar" type="ProgressBar" parent="InteriorHab/Oxygenator"]
 margin_left = -32.0
-margin_top = -56.0
+margin_top = -64.0
 margin_right = 48.0
-margin_bottom = -42.0
+margin_bottom = -40.0
+theme = ExtResource( 7 )
 
 [node name="Sprite" type="Sprite" parent="InteriorHab/Oxygenator"]
 texture = ExtResource( 6 )
@@ -122,17 +141,20 @@ texture = ExtResource( 2 )
 shape = SubResource( 9 )
 
 [node name="Label" type="Label" parent="InteriorHab/WaterReclaimer"]
+visible = false
 margin_left = 35.0
 margin_top = 15.0
 margin_right = 75.0
 margin_bottom = 29.0
+theme = ExtResource( 7 )
 text = "0	"
 
 [node name="ProgressBar" type="ProgressBar" parent="InteriorHab/WaterReclaimer"]
 margin_left = -32.0
-margin_top = -48.0
+margin_top = -56.0
 margin_right = 32.0
-margin_bottom = -34.0
+margin_bottom = -36.0
+theme = ExtResource( 7 )
 
 [node name="Farm" type="Area2D" parent="InteriorHab"]
 position = Vector2( 352, 352 )
@@ -147,74 +169,183 @@ position = Vector2( 96, 56 )
 shape = SubResource( 2 )
 
 [node name="Label" type="Label" parent="InteriorHab/Farm"]
+visible = false
 margin_left = -24.0
 margin_top = -88.0
 margin_right = 16.0
 margin_bottom = -74.0
+theme = ExtResource( 7 )
 text = "0	"
 
 [node name="ProgressBar" type="ProgressBar" parent="InteriorHab/Farm"]
 margin_left = -32.0
-margin_top = -112.0
+margin_top = -120.0
 margin_right = 224.0
-margin_bottom = -98.0
+margin_bottom = -100.0
+theme = ExtResource( 7 )
+
+[node name="UpgradeBooth" type="Area2D" parent="InteriorHab"]
+position = Vector2( 328, 112 )
+
+[node name="Sprite" type="Sprite" parent="InteriorHab/UpgradeBooth"]
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteriorHab/UpgradeBooth"]
+shape = SubResource( 12 )
 
 [node name="Player" parent="InteriorHab" instance=ExtResource( 1 )]
 position = Vector2( 120, 160 )
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="O2Held" type="Label" parent="UI"]
+[node name="BLPanel" type="ColorRect" parent="UI"]
 margin_left = 16.0
-margin_top = 8.0
-margin_right = 56.0
-margin_bottom = 22.0
+margin_top = 440.0
+margin_right = 280.0
+margin_bottom = 584.0
+color = Color( 1, 1, 1, 0.392157 )
+
+[node name="Label2" type="Label" parent="UI/BLPanel"]
+margin_left = 136.0
+margin_right = 218.0
+margin_bottom = 20.0
+theme = ExtResource( 7 )
+text = "In Machine:"
+
+[node name="Line2D2" type="Line2D" parent="UI/BLPanel"]
+position = Vector2( 33.9225, 24 )
+scale = Vector2( 0.513566, 0.98 )
+points = PoolVector2Array( -66, 0, 446, 0 )
+width = 2.0
+default_color = Color( 0.419608, 0.419608, 0.419608, 1 )
+
+[node name="Line2D" type="Line2D" parent="UI/BLPanel"]
+position = Vector2( 58, 23.96 )
+scale = Vector2( 0.5, 0.98 )
+points = PoolVector2Array( 112, 0, 112, 96 )
+width = 2.0
+default_color = Color( 0.419608, 0.419608, 0.419608, 1 )
+
+[node name="Label" type="Label" parent="UI/BLPanel"]
+margin_left = 16.0
+margin_right = 120.0
+margin_bottom = 20.0
+theme = ExtResource( 7 )
+text = "On Hand:"
+
+[node name="VBox" type="VBoxContainer" parent="UI/BLPanel"]
+margin_left = 5.0
+margin_top = 28.0
+margin_right = 62.0
+margin_bottom = 148.0
+theme = ExtResource( 7 )
+
+[node name="O2Held" type="Label" parent="UI/BLPanel/VBox"]
+margin_right = 57.0
+margin_bottom = 20.0
+theme = ExtResource( 7 )
 text = "O2: "
 
-[node name="Label" type="Label" parent="UI/O2Held"]
-margin_left = 40.0
-margin_right = 80.0
-margin_bottom = 14.0
-text = "5"
+[node name="Sprite" type="Sprite" parent="UI/BLPanel/VBox/O2Held"]
+position = Vector2( 60, 12 )
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 9 )
 
-[node name="WaterHeld" type="Label" parent="UI"]
-margin_left = 16.0
+[node name="AmountLabel" type="Label" parent="UI/BLPanel/VBox/O2Held"]
+margin_left = 80.0
+margin_right = 100.0
+margin_bottom = 20.0
+text = "10"
+align = 2
+
+[node name="DurationLabel" type="Label" parent="UI/BLPanel/VBox/O2Held"]
+margin_left = 116.0
+margin_right = 116.0
+margin_bottom = 20.0
+
+[node name="WaterHeld" type="Label" parent="UI/BLPanel/VBox"]
 margin_top = 24.0
-margin_right = 56.0
-margin_bottom = 38.0
+margin_right = 57.0
+margin_bottom = 44.0
+theme = ExtResource( 7 )
 text = "H20:"
 
-[node name="Label" type="Label" parent="UI/WaterHeld"]
-margin_left = 40.0
-margin_right = 80.0
-margin_bottom = 14.0
-text = "4"
+[node name="AmountLabel" type="Label" parent="UI/BLPanel/VBox/WaterHeld"]
+margin_left = 60.0
+margin_right = 100.0
+margin_bottom = 20.0
+text = "10"
+align = 2
 
-[node name="FoodHeld" type="Label" parent="UI"]
-margin_left = 16.0
-margin_top = 40.0
-margin_right = 56.0
-margin_bottom = 54.0
+[node name="DurationLabel" type="Label" parent="UI/BLPanel/VBox/WaterHeld"]
+margin_left = 116.0
+margin_right = 228.0
+margin_bottom = 20.0
+
+[node name="Sprite" type="Sprite" parent="UI/BLPanel/VBox/WaterHeld"]
+position = Vector2( 58.8, 10.8 )
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 10 )
+
+[node name="FoodHeld" type="Label" parent="UI/BLPanel/VBox"]
+margin_top = 48.0
+margin_right = 57.0
+margin_bottom = 68.0
+theme = ExtResource( 7 )
 text = "Food:"
 
-[node name="Label" type="Label" parent="UI/FoodHeld"]
-margin_left = 40.0
-margin_right = 80.0
-margin_bottom = 14.0
-text = "1"
+[node name="AmountLabel" type="Label" parent="UI/BLPanel/VBox/FoodHeld"]
+margin_left = 60.0
+margin_right = 100.0
+margin_bottom = 20.0
+text = "10"
+align = 2
 
-[node name="MetalHeld" type="Label" parent="UI"]
-margin_left = 16.0
-margin_top = 56.0
-margin_right = 56.0
-margin_bottom = 70.0
+[node name="DurationLabel" type="Label" parent="UI/BLPanel/VBox/FoodHeld"]
+margin_left = 116.0
+margin_right = 228.0
+margin_bottom = 20.0
+
+[node name="Sprite" type="Sprite" parent="UI/BLPanel/VBox/FoodHeld"]
+position = Vector2( 58.8, 11.8 )
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 8 )
+
+[node name="MetalHeld" type="Label" parent="UI/BLPanel/VBox"]
+margin_top = 72.0
+margin_right = 57.0
+margin_bottom = 92.0
+theme = ExtResource( 7 )
 text = "Metal:"
 
-[node name="Label" type="Label" parent="UI/MetalHeld"]
-margin_left = 40.0
-margin_right = 80.0
-margin_bottom = 14.0
-text = "5"
+[node name="AmountLabel" type="Label" parent="UI/BLPanel/VBox/MetalHeld"]
+margin_left = 60.0
+margin_right = 100.0
+margin_bottom = 20.0
+text = "10"
+align = 2
+
+[node name="Sprite" type="Sprite" parent="UI/BLPanel/VBox/MetalHeld"]
+position = Vector2( 58.8, 12.8 )
+texture = ExtResource( 11 )
+
+[node name="RocketArrivalLabel" type="Label" parent="UI/BLPanel/VBox"]
+margin_top = 96.0
+margin_right = 57.0
+margin_bottom = 116.0
+theme = ExtResource( 7 )
+text = "Rocket:"
+
+[node name="AmountLabel" type="Label" parent="UI/BLPanel/VBox/RocketArrivalLabel"]
+margin_left = 75.0
+margin_right = 224.0
+margin_bottom = 20.0
+text = "10"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/BLPanel/VBox"]
+margin_top = 120.0
+margin_right = 57.0
+margin_bottom = 120.0
 
 [node name="InteractionLabel" type="Label" parent="UI"]
 visible = false
@@ -222,16 +353,377 @@ margin_left = 8.0
 margin_top = 496.0
 margin_right = 1016.0
 margin_bottom = 510.0
+theme = ExtResource( 7 )
 text = "E to repair"
 align = 1
+
+[node name="DayLabel" type="Label" parent="UI"]
+margin_left = 864.0
+margin_top = 536.0
+margin_right = 904.0
+margin_bottom = 556.0
+theme = ExtResource( 7 )
+text = "Day:"
+
+[node name="Label" type="Label" parent="UI/DayLabel"]
+margin_left = 40.0
+margin_right = 80.0
+margin_bottom = 14.0
+text = "1"
 
 [node name="TimeProgressBar" type="ProgressBar" parent="UI"]
 margin_left = 864.0
 margin_top = 560.0
 margin_right = 1000.0
 margin_bottom = 582.0
+theme = ExtResource( 7 )
 max_value = 3.0
-step = 6.0
+step = 3.0
+
+[node name="ObjectivesPanel" type="ColorRect" parent="UI"]
+visible = false
+margin_left = 880.0
+margin_top = 8.0
+margin_right = 1016.0
+margin_bottom = 152.0
+theme = ExtResource( 7 )
+color = Color( 1, 1, 1, 0.196078 )
+
+[node name="Line2D" type="Line2D" parent="UI/ObjectivesPanel"]
+position = Vector2( 0, 10 )
+points = PoolVector2Array( 0, 8, 120, 8 )
+width = 2.0
+
+[node name="Label" type="Label" parent="UI/ObjectivesPanel"]
+margin_right = 120.0
+margin_bottom = 14.0
+text = "Objectives"
+align = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ObjectivesPanel"]
+margin_left = 8.0
+margin_top = 24.0
+margin_right = 112.0
+margin_bottom = 136.0
+custom_constants/separation = 10
+
+[node name="Control" type="Control" parent="UI/ObjectivesPanel/VBoxContainer"]
+margin_right = 104.0
+
+[node name="Label" type="Label" parent="UI/ObjectivesPanel/VBoxContainer/Control"]
+margin_right = 120.0
+margin_bottom = 20.0
+text = "Explore The Hab"
+autowrap = true
+
+[node name="Label2" type="Label" parent="UI/ObjectivesPanel/VBoxContainer/Control"]
+margin_right = 120.0
+margin_bottom = 20.0
+
+[node name="Control4" type="Control" parent="UI/ObjectivesPanel/VBoxContainer"]
+margin_top = 10.0
+margin_right = 104.0
+margin_bottom = 10.0
+
+[node name="Control3" type="Control" parent="UI/ObjectivesPanel/VBoxContainer"]
+margin_top = 20.0
+margin_right = 104.0
+margin_bottom = 20.0
+
+[node name="Label" type="Label" parent="UI/ObjectivesPanel/VBoxContainer/Control3"]
+margin_right = 120.0
+margin_bottom = 20.0
+text = "Leave The Hab"
+
+[node name="Label2" type="Label" parent="UI/ObjectivesPanel/VBoxContainer/Control3"]
+margin_right = 40.0
+margin_bottom = 20.0
+
+[node name="Control5" type="Control" parent="UI/ObjectivesPanel/VBoxContainer"]
+margin_top = 30.0
+margin_right = 104.0
+margin_bottom = 30.0
+
+[node name="Control2" type="Control" parent="UI/ObjectivesPanel/VBoxContainer"]
+margin_top = 40.0
+margin_right = 104.0
+margin_bottom = 40.0
+
+[node name="Label" type="Label" parent="UI/ObjectivesPanel/VBoxContainer/Control2"]
+margin_right = 40.0
+margin_bottom = 20.0
+text = "Signal for Help"
+
+[node name="Label2" type="Label" parent="UI/ObjectivesPanel/VBoxContainer/Control2"]
+margin_left = -4.0
+margin_top = 3.0
+margin_right = 36.0
+margin_bottom = 23.0
+
+[node name="Control6" type="Control" parent="UI/ObjectivesPanel/VBoxContainer"]
+margin_top = 50.0
+margin_right = 104.0
+margin_bottom = 50.0
+
+[node name="Control7" type="Control" parent="UI/ObjectivesPanel/VBoxContainer"]
+margin_top = 60.0
+margin_right = 104.0
+margin_bottom = 60.0
+
+[node name="Label" type="Label" parent="UI/ObjectivesPanel/VBoxContainer/Control7"]
+margin_right = 40.0
+margin_bottom = 20.0
+text = "Get Rescued"
+
+[node name="Label2" type="Label" parent="UI/ObjectivesPanel/VBoxContainer/Control7"]
+margin_left = -4.0
+margin_top = 3.0
+margin_right = 36.0
+margin_bottom = 23.0
+
+[node name="UpgradeMenu" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="UpgradeMenu"]
+margin_left = 408.0
+margin_top = 152.0
+margin_right = 704.0
+margin_bottom = 456.0
+theme = ExtResource( 7 )
+color = Color( 0.368627, 0.368627, 0.368627, 1 )
+
+[node name="Title" type="Label" parent="UpgradeMenu/ColorRect"]
+margin_right = 296.0
+margin_bottom = 20.0
+text = "Upgrade Menu"
+align = 1
+
+[node name="MetalLabel" type="Label" parent="UpgradeMenu/ColorRect"]
+margin_left = 16.0
+margin_top = 280.0
+margin_right = 256.0
+margin_bottom = 300.0
+align = 2
+
+[node name="Sprite" type="Sprite" parent="UpgradeMenu/ColorRect/MetalLabel"]
+position = Vector2( 256, 8 )
+texture = ExtResource( 11 )
+
+[node name="AmountLabel" type="Label" parent="UpgradeMenu/ColorRect/MetalLabel"]
+margin_left = 208.0
+margin_right = 248.0
+margin_bottom = 20.0
+text = "10"
+align = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UpgradeMenu/ColorRect"]
+margin_left = 4.0
+margin_top = 48.0
+margin_right = 292.0
+margin_bottom = 252.0
+custom_constants/separation = 12
+
+[node name="O2Label" type="Label" parent="UpgradeMenu/ColorRect/VBoxContainer"]
+margin_right = 288.0
+margin_bottom = 20.0
+text = "Oxygenator"
+
+[node name="O2Amount" type="Label" parent="UpgradeMenu/ColorRect/VBoxContainer/O2Label"]
+margin_left = 128.0
+margin_right = 168.0
+margin_bottom = 20.0
+text = "10"
+
+[node name="Sprite" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/O2Label"]
+position = Vector2( 159, 10 )
+texture = ExtResource( 11 )
+
+[node name="UpgradeButton" type="Button" parent="UpgradeMenu/ColorRect/VBoxContainer/O2Label"]
+margin_left = 203.0
+margin_right = 285.0
+margin_bottom = 26.0
+text = "Upgrade"
+
+[node name="O2DetailLabel" type="Label" parent="UpgradeMenu/ColorRect/VBoxContainer"]
+margin_top = 32.0
+margin_right = 288.0
+margin_bottom = 52.0
+align = 1
+
+[node name="Input" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/O2DetailLabel"]
+position = Vector2( 68, 8 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 8 )
+
+[node name="Output" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/O2DetailLabel"]
+position = Vector2( 124, 8 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 9 )
+
+[node name="Output2" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/O2DetailLabel"]
+position = Vector2( 153, 8 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 9 )
+
+[node name="Line2D2" type="Line2D" parent="UpgradeMenu/ColorRect/VBoxContainer/O2DetailLabel"]
+position = Vector2( -360, -232 )
+points = PoolVector2Array( 464, 240, 452, 248 )
+width = 3.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Line2D3" type="Line2D" parent="UpgradeMenu/ColorRect/VBoxContainer/O2DetailLabel"]
+position = Vector2( -360, -232 )
+points = PoolVector2Array( 464, 240, 452, 232 )
+width = 3.0
+default_color = Color( 1, 1, 1, 1 )
+begin_cap_mode = 2
+
+[node name="Line2D" type="Line2D" parent="UpgradeMenu/ColorRect/VBoxContainer/O2DetailLabel"]
+position = Vector2( 60, 0 )
+points = PoolVector2Array( 44, 8, 20, 8 )
+width = 3.0
+default_color = Color( 1, 1, 1, 1 )
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Control" type="Control" parent="UpgradeMenu/ColorRect/VBoxContainer"]
+margin_top = 64.0
+margin_right = 288.0
+margin_bottom = 64.0
+
+[node name="H2OLabel" type="Label" parent="UpgradeMenu/ColorRect/VBoxContainer"]
+margin_top = 76.0
+margin_right = 288.0
+margin_bottom = 96.0
+text = "Water Reclaimer"
+
+[node name="H2OAmount" type="Label" parent="UpgradeMenu/ColorRect/VBoxContainer/H2OLabel"]
+margin_left = 127.0
+margin_right = 167.0
+margin_bottom = 20.0
+text = "10"
+
+[node name="Sprite" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/H2OLabel"]
+position = Vector2( 159, 10 )
+texture = ExtResource( 11 )
+
+[node name="UpgradeButton" type="Button" parent="UpgradeMenu/ColorRect/VBoxContainer/H2OLabel"]
+margin_left = 205.0
+margin_right = 287.0
+margin_bottom = 26.0
+text = "Upgrade"
+
+[node name="H2ODetailLabel" type="Label" parent="UpgradeMenu/ColorRect/VBoxContainer"]
+margin_top = 108.0
+margin_right = 288.0
+margin_bottom = 128.0
+align = 1
+
+[node name="Input2" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/H2ODetailLabel"]
+position = Vector2( 68, 12 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 9 )
+
+[node name="Output2" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/H2ODetailLabel"]
+position = Vector2( 124, 12 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 10 )
+
+[node name="Output3" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/H2ODetailLabel"]
+position = Vector2( 154, 12 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 10 )
+
+[node name="Line2D4" type="Line2D" parent="UpgradeMenu/ColorRect/VBoxContainer/H2ODetailLabel"]
+position = Vector2( -360, -228 )
+points = PoolVector2Array( 464, 240, 452, 248 )
+width = 3.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Line2D5" type="Line2D" parent="UpgradeMenu/ColorRect/VBoxContainer/H2ODetailLabel"]
+position = Vector2( -360, -228 )
+points = PoolVector2Array( 464, 240, 452, 232 )
+width = 3.0
+default_color = Color( 1, 1, 1, 1 )
+begin_cap_mode = 2
+
+[node name="Line2D6" type="Line2D" parent="UpgradeMenu/ColorRect/VBoxContainer/H2ODetailLabel"]
+position = Vector2( 60, 4 )
+points = PoolVector2Array( 44, 8, 20, 8 )
+width = 3.0
+default_color = Color( 1, 1, 1, 1 )
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Control2" type="Control" parent="UpgradeMenu/ColorRect/VBoxContainer"]
+margin_top = 140.0
+margin_right = 288.0
+margin_bottom = 140.0
+
+[node name="FoodLabel" type="Label" parent="UpgradeMenu/ColorRect/VBoxContainer"]
+margin_top = 152.0
+margin_right = 288.0
+margin_bottom = 172.0
+text = "Food Generator"
+
+[node name="FoodAmount" type="Label" parent="UpgradeMenu/ColorRect/VBoxContainer/FoodLabel"]
+margin_left = 127.0
+margin_right = 167.0
+margin_bottom = 20.0
+text = "10"
+
+[node name="UpgradeButton" type="Button" parent="UpgradeMenu/ColorRect/VBoxContainer/FoodLabel"]
+margin_left = 205.0
+margin_right = 287.0
+margin_bottom = 26.0
+text = "Upgrade"
+
+[node name="Sprite" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/FoodLabel"]
+position = Vector2( 159, 10 )
+texture = ExtResource( 11 )
+
+[node name="FoodDetailLabel" type="Label" parent="UpgradeMenu/ColorRect/VBoxContainer"]
+margin_top = 184.0
+margin_right = 288.0
+margin_bottom = 204.0
+rect_min_size = Vector2( 250, 0 )
+align = 1
+
+[node name="Input3" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/FoodDetailLabel"]
+position = Vector2( 68, 8 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 10 )
+
+[node name="Output3" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/FoodDetailLabel"]
+position = Vector2( 124, 8 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 8 )
+
+[node name="Output4" type="Sprite" parent="UpgradeMenu/ColorRect/VBoxContainer/FoodDetailLabel"]
+position = Vector2( 147, 8 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 8 )
+
+[node name="Line2D7" type="Line2D" parent="UpgradeMenu/ColorRect/VBoxContainer/FoodDetailLabel"]
+position = Vector2( -360, -232 )
+points = PoolVector2Array( 464, 240, 452, 248 )
+width = 3.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Line2D8" type="Line2D" parent="UpgradeMenu/ColorRect/VBoxContainer/FoodDetailLabel"]
+position = Vector2( -360, -232 )
+points = PoolVector2Array( 464, 240, 452, 232 )
+width = 3.0
+default_color = Color( 1, 1, 1, 1 )
+begin_cap_mode = 2
+
+[node name="Line2D9" type="Line2D" parent="UpgradeMenu/ColorRect/VBoxContainer/FoodDetailLabel"]
+position = Vector2( 60, 0 )
+points = PoolVector2Array( 44, 8, 20, 8 )
+width = 3.0
+default_color = Color( 1, 1, 1, 1 )
+begin_cap_mode = 2
+end_cap_mode = 2
 
 [connection signal="body_entered" from="InteriorHab/Walls/Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="InteriorHab/Walls/Area2D" to="." method="_on_Area2D_body_exited"]
@@ -241,3 +733,8 @@ step = 6.0
 [connection signal="body_exited" from="InteriorHab/WaterReclaimer" to="." method="_on_WaterReclaimer_body_exited"]
 [connection signal="body_entered" from="InteriorHab/Farm" to="." method="_on_Farm_body_entered"]
 [connection signal="body_exited" from="InteriorHab/Farm" to="." method="_on_Farm_body_exited"]
+[connection signal="body_entered" from="InteriorHab/UpgradeBooth" to="." method="_on_UpgradeBooth_body_entered"]
+[connection signal="body_exited" from="InteriorHab/UpgradeBooth" to="." method="_on_UpgradeBooth_body_exited"]
+[connection signal="pressed" from="UpgradeMenu/ColorRect/VBoxContainer/O2Label/UpgradeButton" to="." method="_on_UpgradeButton_pressed"]
+[connection signal="pressed" from="UpgradeMenu/ColorRect/VBoxContainer/H2OLabel/UpgradeButton" to="." method="_on_WaterUpgradeButton_pressed"]
+[connection signal="pressed" from="UpgradeMenu/ColorRect/VBoxContainer/FoodLabel/UpgradeButton" to="." method="_on_FoodUpgradeButton_pressed"]
