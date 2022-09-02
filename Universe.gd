@@ -1,17 +1,15 @@
 extends Node2D
 
 var resources = {
-	"oxygen": {"on_hand":50,"capacity":200,"held":0, "health":50, "tick_drain":6.0, "tick_drain_amount":6.0, "increase_amount":1},
-	"water": {"on_hand":25,"capacity":200,"held":0, "health":50, "tick_drain":6.0, "tick_drain_amount":6.0, "increase_amount":1},
-	"food": {"on_hand":50,"capacity":100,"held":0, "health":50, "tick_drain":12.0, "tick_drain_amount":6.0, "increase_amount":1},
-	"metal": {"on_hand":100},
+	"oxygen": {"on_hand":50,"capacity":200,"held":0, "health":100, "tick_drain":6.0, "tick_drain_amount":6.0, "increase_amount":1,"automated":false,"node":"InteriorHab/Oxygenator","should_generate":true},
+	"water": {"on_hand":25,"capacity":200,"held":0, "health":100, "tick_drain":6.0, "tick_drain_amount":6.0, "increase_amount":1,"automated":false,"node":"InteriorHab/WaterReclaimer","should_generate":true},
+	"food": {"on_hand":50,"capacity":100,"held":0, "health":100, "tick_drain":12.0, "tick_drain_amount":6.0, "increase_amount":1,"automated":false,"node":"InteriorHab/Farm","should_generate":true},
+	"metal": {"on_hand":10},
 } as Dictionary
 
 var resource_instance = preload("res://Resource.tscn")
 var target_machine = null
-var repairables = {"oxygen":{"automated":false,"node":"InteriorHab/Oxygenator"},
-					"water":{"automated":false,"node":"InteriorHab/WaterReclaimer"},
-					"food":{"automated":false,"node":"InteriorHab/Farm"}}
+var repairables = ["oxygen","water","food"]
 var upgrade_price = 2
 var automate_price = 10
 
@@ -37,6 +35,7 @@ func _ready():
 func _process(delta):
 	if Input.is_action_pressed("ui_accept"):
 		check_repair()
+		check_machine()
 
 	update_labels()
 	tick -= delta
@@ -52,14 +51,21 @@ func _process(delta):
 
 func update_progress():
 	for machine in repairables:
-		if repairables[machine]["automated"] != true:
+		if resources[machine]["automated"] == false:
 			decrease_machine(machine)
-		generate_resource(machine,get_node(repairables[machine]["node"]))
+			
+		automatic_item_collected(machine)
+	
+			#generate_resource(machine)
 
 func decrease_machine(resource):
 	if time_elapsed % int(resources[resource]["tick_drain"]) == 0 and resources[resource]["held"] >0:
 		var dec_amount =  min(resources[resource]["tick_drain_amount"],resources[resource]["held"])
 		resources[resource]["held"] -= dec_amount
+
+func check_machine():
+	if target_machine == "machine" and Input.is_action_just_pressed("ui_accept"):
+		resources["metal"]["on_hand"] += 1
 
 func check_repair():
 	if resources["metal"]["on_hand"] >0:
@@ -81,16 +87,6 @@ func handle_interaction(action,source,resource):
 
 func input_resource(source,resource):
 	
-	# 400 on hand water
-	# 600 capacity oxygen
-	# 0 in machine water
-	# 
-	# available capacity = 600-400 = 200
-	# amount_moved = min(400,200) = 200
-	# 
-	# 
-	# 
-	
 	var available_capacity = resources[resource]["capacity"] - resources[resource]["held"]
 	var amount_moved = min(resources[source]["on_hand"],available_capacity)
 	resources[resource]["held"] += amount_moved
@@ -99,33 +95,41 @@ func input_resource(source,resource):
 	if resources[resource]["health"] < 100:
 		$UI/InteractionLabel.text = "E to repair"
 		$UI/InteractionLabel.visible = true
-	
-func generate_resource(resource,node):
 
-	if repairables[resource]["automated"] == true:
-		automatic_item_collected(resource)
-	elif resources[resource]["held"] > 0:
-		var o = resource_instance.instance()
-		o.global_position = node.global_position
-		o.resource_type = resource
-		o.connect("collected",self,"item_collected")
-		get_parent().add_child(o)
-	
+func generate_resource(resource):
+
+	var resource_node = get_node(resources[resource]["node"])
+
+	for i in resources[resource]["increase_amount"]:
+		if resources[resource]["should_generate"]:
+			if resources[resource]["held"] > 0:
+				var o = resource_instance.instance()
+				o.global_position = resource_node.global_position
+				o.resource_type = resource
+				o.connect("collected",self,"item_collected")
+				get_parent().add_child(o)
 
 func item_collected(resource):
-	resources[resource]["on_hand"] += resources[resource]["increase_amount"]
+	resources[resource]["on_hand"] += 1 #resources[resource]["increase_amount"]
 
 func automatic_item_collected(resource):
 	#picks up resource into hand and immediately into machine
-	item_collected(resource)
+	#if resources[resource]["capacity"] != resources[resource]["held"]:
+		#item_collected(resource)
 	match resource:
 		"oxygen":
-			input_resource("food", "oxygen")
+			automatic_input_resource(resource)
 		"water":
-			input_resource("oxygen", "water")
-		"water":
-			input_resource("water", "food")
-	
+			automatic_input_resource(resource)
+		"food":
+			automatic_input_resource(resource)
+
+func automatic_input_resource(resource):
+	if resources[resource]["automated"] == true:
+		if resources[resource]["held"] < resources[resource]["capacity"]:
+			resources[resource]["held"] += resources[resource]["increase_amount"]
+	generate_resource(resource)
+
 func _on_Oxygenator_body_entered(body):
 	if body.name == "Player":
 		target_machine = "oxygen"
@@ -198,12 +202,14 @@ func _on_Farm_body_exited(body):
 
 func _on_Area2D_body_entered(body):
 	if body.name == "Player":
-		$UI/InteractionLabel.text = "E to exit The Hab"
-		$UI/InteractionLabel.visible = true
+		return
+		#$UI/InteractionLabel.text = "E to exit The Hab"
+		#$UI/InteractionLabel.visible = true
 
 func _on_Area2D_body_exited(body):
 	if body.name == "Player":
-		$UI/InteractionLabel.visible = false
+		return
+		#$UI/InteractionLabel.visible = false
 
 func duration_remaining(resource):
 	# ticks until amount = 0	
@@ -259,20 +265,36 @@ func _on_FoodUpgradeButton_pressed():
 func _on_O2ConnectorUpgrade_pressed():
 	if resources["metal"]["on_hand"] >= automate_price:
 		$InteriorHab/FoodtoO2.visible = true
-		repairables["oxygen"]["automated"] = true
+		resources["oxygen"]["automated"] = true
+		resources["food"]["should_generate"] = false
 		$UpgradeMenu/TabContainer/Automate/O2PipeLabel/UpgradeButton.disabled = true
 		resources["metal"]["on_hand"] -= automate_price
 
 func _on_WaterConnectorUpgrade_pressed():
 	if resources["metal"]["on_hand"] >= automate_price:
 		$InteriorHab/O2toH2O.visible = true
-		repairables["water"]["automated"] = true
+		resources["water"]["automated"] = true
+		resources["oxygen"]["should_generate"] = false
 		$UpgradeMenu/TabContainer/Automate/H2OPipeLabel/UpgradeButton.disabled = true
 		resources["metal"]["on_hand"] -= automate_price
 
 func _on_FoodConnectorUpgrade_pressed():
 	if resources["metal"]["on_hand"] >= automate_price:
 		$InteriorHab/H2OtoFood.visible = true
-		repairables["food"]["automated"] = true
+		resources["food"]["automated"] = true
+		resources["water"]["should_generate"] = false
 		$UpgradeMenu/TabContainer/Automate/FoodPipeLabel/UpgradeButton.disabled = true
 		resources["metal"]["on_hand"] -= automate_price
+
+
+func _on_Machine_body_entered(body):
+	if body.name == "Player":
+		target_machine = "machine"
+		$UI/InteractionLabel.text = "E to decompose machine"
+		$UI/InteractionLabel.visible = true
+
+
+func _on_Machine_body_exited(body):
+	if body.name == "Player":
+		target_machine = null
+		$UI/InteractionLabel.visible = false
