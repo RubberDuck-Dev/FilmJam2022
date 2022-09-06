@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://sprites/icon.png" type="Texture" id=2]
@@ -16,7 +16,8 @@
 [ext_resource path="res://sprites/FoodtoO2.png" type="Texture" id=14]
 [ext_resource path="res://sprites/H2OtoFood.png" type="Texture" id=15]
 [ext_resource path="res://sprites/O2toH2O.png" type="Texture" id=16]
-[ext_resource path="res://sprites/machine1.png" type="Texture" id=17]
+[ext_resource path="res://Machine.tscn" type="PackedScene" id=17]
+[ext_resource path="res://sprites/light_spill.png" type="Texture" id=18]
 
 [sub_resource type="RectangleShape2D" id=16]
 extents = Vector2( 16, 188 )
@@ -384,12 +385,6 @@ tracks/13/keys = {
 "values": [ true ]
 }
 
-[sub_resource type="RectangleShape2D" id=18]
-extents = Vector2( 28, 21 )
-
-[sub_resource type="RectangleShape2D" id=19]
-extents = Vector2( 40, 29 )
-
 [node name="Universe" type="Node2D"]
 script = ExtResource( 3 )
 
@@ -564,8 +559,21 @@ shape = SubResource( 12 )
 [node name="Player" parent="InteriorHab" instance=ExtResource( 1 )]
 position = Vector2( 1616, 1480 )
 
+[node name="Light2D" type="Light2D" parent="InteriorHab"]
+position = Vector2( 1600, 1736 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 18 )
+color = Color( 0.901961, 0.223529, 0.0666667, 1 )
+range_height = 2.0
+
+[node name="Light2D2" type="Light2D" parent="InteriorHab"]
+position = Vector2( 1600, 1632 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 18 )
+color = Color( 0.901961, 0.223529, 0.0666667, 1 )
+range_height = 2.0
+
 [node name="UI" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="BLPanel" type="ColorRect" parent="UI"]
 margin_left = 16.0
@@ -851,7 +859,6 @@ margin_right = 36.0
 margin_bottom = 23.0
 
 [node name="UpgradeMenu" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="TabContainer" type="TabContainer" parent="UpgradeMenu"]
 margin_left = 408.0
@@ -861,7 +868,6 @@ margin_bottom = 384.0
 tab_align = 0
 
 [node name="Upgrade" type="VBoxContainer" parent="UpgradeMenu/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -1076,6 +1082,7 @@ begin_cap_mode = 2
 end_cap_mode = 2
 
 [node name="Automate" type="VBoxContainer" parent="UpgradeMenu/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -1240,21 +1247,7 @@ anims/H2OPipe = SubResource( 15 )
 anims/O2Pipe = SubResource( 13 )
 anims/RESET = SubResource( 14 )
 
-[node name="Machine" type="StaticBody2D" parent="."]
-position = Vector2( -96, -64 )
-
-[node name="Sprite" type="Sprite" parent="Machine"]
-texture = ExtResource( 17 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Machine"]
-position = Vector2( -1, 11 )
-shape = SubResource( 18 )
-
-[node name="Area2D" type="Area2D" parent="Machine"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Machine/Area2D"]
-position = Vector2( 0, 19 )
-shape = SubResource( 19 )
+[node name="Machine" parent="." instance=ExtResource( 17 )]
 
 [connection signal="body_entered" from="InteriorHab/Walls/Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="InteriorHab/Walls/Area2D" to="." method="_on_Area2D_body_exited"]
@@ -1272,5 +1265,3 @@ shape = SubResource( 19 )
 [connection signal="pressed" from="UpgradeMenu/TabContainer/Automate/O2PipeLabel/UpgradeButton" to="." method="_on_O2ConnectorUpgrade_pressed"]
 [connection signal="pressed" from="UpgradeMenu/TabContainer/Automate/H2OPipeLabel/UpgradeButton" to="." method="_on_WaterConnectorUpgrade_pressed"]
 [connection signal="pressed" from="UpgradeMenu/TabContainer/Automate/FoodPipeLabel/UpgradeButton" to="." method="_on_FoodConnectorUpgrade_pressed"]
-[connection signal="body_entered" from="Machine/Area2D" to="." method="_on_Machine_body_entered"]
-[connection signal="body_exited" from="Machine/Area2D" to="." method="_on_Machine_body_exited"]

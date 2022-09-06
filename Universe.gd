@@ -26,11 +26,38 @@ var day_duration = 24 #ticks per day
 var tick_duration = 2.0
 var tick = tick_duration
 
+
 func _ready():
+	$UI/BLPanel.visible = false
+	$UI/DayLabel.visible = false
+	$UI/TimeProgressBar.visible = false
+	start_dialog()
+	
+	var err = $Machine.connect("machine_targeted",self,"machine_targeted")
+	if err != 0:
+		print(err)
+	err = $Machine.connect("machine_exited",self,"machine_exited")
+	if err != 0:
+		print(err)
+	
 	update_labels()
 	$UpgradeMenu.visible = upgrade_menu_visible
 	$UI.visible = true
 	set_process(true)
+
+
+func start_dialog():
+	var dialog = Dialogic.start("opening_sequence")
+	dialog.connect("dialogic_signal", self, "dialog_listener")
+	add_child(dialog)
+
+func dialog_listener(string):
+	match string:
+		"opening_end":
+			$UI/BLPanel.visible = true
+			$UI/DayLabel.visible = true
+			$UI/TimeProgressBar.visible = true
+			$InteriorHab/Player.can_move = true
 
 func _process(delta):
 	if Input.is_action_pressed("ui_accept"):
@@ -66,6 +93,9 @@ func decrease_machine(resource):
 func check_machine():
 	if target_machine == "machine" and Input.is_action_just_pressed("ui_accept"):
 		resources["metal"]["on_hand"] += 1
+		get_node("Machine").health -= 1
+		if get_node("Machine").health <= 0:
+			get_node("Machine").queue_free()
 
 func check_repair():
 	if resources["metal"]["on_hand"] >0:
@@ -146,6 +176,7 @@ func _on_Farm_body_entered(body):
 		handle_interaction("input","water","food")
 
 func update_labels():
+		
 	$UI/BLPanel/VBox/O2Held/AmountLabel.text = str(resources["oxygen"]["on_hand"])
 	$UI/BLPanel/VBox/O2Held/DurationLabel.text = duration_remaining("oxygen")
 
@@ -286,15 +317,11 @@ func _on_FoodConnectorUpgrade_pressed():
 		$UpgradeMenu/TabContainer/Automate/FoodPipeLabel/UpgradeButton.disabled = true
 		resources["metal"]["on_hand"] -= automate_price
 
+func machine_targeted():
+	target_machine = "machine"
+	$UI/InteractionLabel.text = "E to disassemble machine"
+	$UI/InteractionLabel.visible = true
 
-func _on_Machine_body_entered(body):
-	if body.name == "Player":
-		target_machine = "machine"
-		$UI/InteractionLabel.text = "E to decompose machine"
-		$UI/InteractionLabel.visible = true
-
-
-func _on_Machine_body_exited(body):
-	if body.name == "Player":
-		target_machine = null
-		$UI/InteractionLabel.visible = false
+func machine_exited():
+	target_machine = null
+	$UI/InteractionLabel.visible = false

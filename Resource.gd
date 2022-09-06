@@ -8,7 +8,7 @@ var food = preload("res://sprites/food.png")
 var metal = preload("res://sprites/metal.png")
 
 var speed = 40
-var rot = rand_range(0,-180)
+var rot = rand_range(-90,90)
 
 var decay_time = 3.0
 

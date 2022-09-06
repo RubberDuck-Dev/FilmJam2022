@@ -1,0 +1,102 @@
+{
+	"events": [
+		{
+			"animation": "[Default]",
+			"animation_length": 0,
+			"change_mirror_portrait": false,
+			"change_z_index": false,
+			"character": "character-1662400291.json",
+			"event_id": "dialogic_002",
+			"mirror_portrait": false,
+			"portrait": "Default",
+			"portrait_definition": "",
+			"position": {
+				"0": false,
+				"1": false,
+				"2": false,
+				"3": false,
+				"4": true
+			},
+			"type": 0,
+			"z_index": 0
+		},
+		{
+			"character": "character-1662400291.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "bzzt.. bzzt.."
+		},
+		{
+			"animation": "[Default]",
+			"animation_length": 0,
+			"animation_wait": false,
+			"change_mirror_portrait": false,
+			"change_z_index": false,
+			"character": "character-1662395136.json",
+			"event_id": "dialogic_002",
+			"mirror_portrait": false,
+			"portrait": "Default",
+			"portrait_definition": "",
+			"position": {
+				"0": false,
+				"1": false,
+				"2": false,
+				"3": false,
+				"4": true
+			},
+			"type": 0,
+			"z_index": 0
+		},
+		{
+			"character": "character-1662395136.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "What... what happened?"
+		},
+		{
+			"character": "character-1662400291.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "bzzt... bzzt..."
+		},
+		{
+			"character": "character-1662395136.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "*click* Hello? Is anyone out there?"
+		},
+		{
+			"character": "character-1662395136.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "This dang radio is busted."
+		},
+		{
+			"character": "character-1662395136.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "So I'm all alone..."
+		},
+		{
+			"character": "character-1662395136.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "On Jupiter."
+		},
+		{
+			"character": "character-1662395136.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Great."
+		},
+		{
+			"emit_signal": "opening_end",
+			"event_id": "dialogic_040"
+		}
+	],
+	"metadata": {
+		"dialogic-version": "1.4.5",
+		"file": "timeline-1662395563.json",
+		"name": "opening_sequence"
+	}
+}
